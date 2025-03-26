@@ -3,7 +3,7 @@ Example usage of generic types in Python.
 """
 from dataclasses import dataclass, field
 from typing import List
-from generics import Stack
+from generics.stack import Stack
 from generics.result import Result
 from generics.repository import Repository, InMemoryRepository, Identifiable, RepositoryError
 
@@ -47,58 +47,49 @@ def demonstrate_result() -> None:
     print("\n=== Result Examples ===")
     
     # Example 1: Division with error handling
+    print("\nDivision examples:")
     def divide(a: float, b: float) -> Result[float, str]:
-        """Divide two numbers, returning an error if dividing by zero."""
         if b == 0:
             return Result.err("division by zero")
         return Result.ok(a / b)
     
-    print("\nDivision examples:")
-    results = [
-        divide(10, 2),
-        divide(1, 0),
-        divide(15, 3)
-    ]
+    result1 = divide(10, 2)
+    result2 = divide(10, 0)
+    result3 = divide(10, 2)
     
-    for i, result in enumerate(results, 1):
-        if result.is_ok():
-            print(f"Result {i}: {result.unwrap()}")
-        else:
-            print(f"Result {i}: Error - {result.unwrap_err()}")
+    print(f"Result 1: {result1.unwrap()}")
+    print(f"Result 2: Error - {result2.unwrap_err()}")
+    print(f"Result 3: {result3.unwrap_or(0.0)}")
     
     # Example 2: Chaining operations
-    def parse_number(s: str) -> Result[int, str]:
-        """Parse a string to an integer."""
+    print("\nChaining operations:")
+    def parse_int(s: str) -> Result[int, str]:
         try:
             return Result.ok(int(s))
         except ValueError:
             return Result.err(f"could not parse '{s}' as integer")
     
-    def double(x: int) -> Result[int, str]:
-        """Double a number."""
-        return Result.ok(x * 2)
+    def double(n: int) -> Result[int, str]:
+        return Result.ok(n * 2)
     
-    print("\nChaining operations:")
-    inputs = ["42", "not a number", "21"]
+    result = parse_int("42").and_then(double)
+    print(f"Double of 42: {result.unwrap()}")
     
-    for s in inputs:
-        # Chain parse_number and double operations
-        result = parse_number(s).and_then(double)
-        if result.is_ok():
-            print(f"Double of {s}: {result.unwrap()}")
-        else:
-            print(f"Error processing {s}: {result.unwrap_err()}")
+    result = parse_int("not a number").and_then(double)
+    print(f"Error processing not a number: {result.unwrap_err()}")
     
-    # Example 3: Using map and unwrap_or
+    result = parse_int("21").and_then(double)
+    print(f"Double of 21: {result.unwrap()}")
+    
+    # Example 3: Mapping and defaults
     print("\nMapping and defaults:")
-    numbers = ["123", "456", "abc", "789"]
+    def square_number(s: str) -> Result[int, str]:
+        return parse_int(s).map(lambda x: x * x)
     
+    numbers = ["123", "456", "abc", "789"]
     for num in numbers:
-        # Try to parse and square the number, or use 0 if it fails
-        result = (parse_number(num)
-                 .map(lambda x: x * x)
-                 .unwrap_or(0))
-        print(f"Square of {num}: {result}")
+        result = square_number(num)
+        print(f"Square of {num}: {result.unwrap_or(0)}")
 
 
 def demonstrate_repository() -> None:
