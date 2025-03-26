@@ -2,7 +2,9 @@
 
 This section demonstrates the use of generics in Python using type hints and the `typing` module. We'll explore various aspects of generic programming through practical examples.
 
-## Diagram
+## Stack[T] - Generic Stack Implementation
+
+### Diagram
 
 ```mermaid
 classDiagram
@@ -13,45 +15,56 @@ classDiagram
         +peek() Optional[T]
         +is_empty() bool
         +size() int
+        +__iter__() Iterator[T]
     }
+    class T {
+        <<parameter>>
+    }
+    Stack --> "0..*" T : contains
+```
+
+### Overview
+
+A generic stack implementation that can work with any type. Key features:
+- Type-safe push and pop operations
+- Optional peek that handles empty stacks
+- Iterable interface for traversing elements
+- Comprehensive string representations
+
+## Result[T, E] - Generic Error Handling
+
+### Diagram
+
+```mermaid
+classDiagram
     class Result~T, E~ {
-        +value: Optional[T]
-        +error: Optional[E]
+        -value: Optional[T]
+        -error: Optional[E]
+        +ok(value: T)$ Result[T, E]
+        +err(error: E)$ Result[T, E]
         +is_ok() bool
         +is_err() bool
         +unwrap() T
         +unwrap_err() E
+        +map(op: Callable[[T], U]) Result[U, E]
     }
-    class Repository~T~ {
-        <<interface>>
-        +find_by_id(id: str) Result[T, Error]
-        +save(item: T) Result[T, Error]
-        +delete(id: str) Result[None, Error]
+    class T {
+        <<success>>
     }
-    class Cache~K, V~ {
-        -items: Dict[K, V]
-        -expiry: Dict[K, datetime]
-        +get(key: K) Optional[V]
-        +set(key: K, value: V)
-        +has(key: K) bool
+    class E {
+        <<error>>
     }
-
-    Stack --> "0..*" T : contains
     Result --> "0..1" T : success
     Result --> "0..1" E : failure
-    Repository --> T : manages
-    Cache --> K : indexes
-    Cache --> V : stores
 ```
 
-## Overview
+### Overview
 
-Generics enable you to write flexible, reusable code that works with different types while maintaining type safety. Key benefits include:
-
-- Type safety without code duplication
-- Better IDE support and autocompletion
-- Catch type-related errors at compile time
-- Clear documentation of type requirements
+A type-safe error handling mechanism inspired by Rust's Result type. Key features:
+- Explicit error handling without exceptions
+- Type-safe success and error values
+- Chainable operations with map and and_then
+- Rich set of unwrap operations
 
 ## Implementation Details
 
@@ -67,12 +80,12 @@ We're implementing several generic types to demonstrate different aspects of gen
    - Implements the Railway-oriented programming pattern
    - Provides a functional approach to error handling
 
-3. **Repository[T]**: A generic data access interface
+3. **Repository[T]**: A generic data access interface _(Coming Soon)_
    - Demonstrates generic protocols
    - Shows bounded type parameters
    - Implements the Repository pattern
 
-4. **Cache[K, V]**: A generic key-value cache
+4. **Cache[K, V]**: A generic key-value cache _(Coming Soon)_
    - Shows multiple type parameters with different roles
    - Implements time-based expiration
    - Demonstrates type constraints
@@ -95,17 +108,6 @@ def divide(a: float, b: float) -> Result[float, str]:
 result = divide(10, 2)
 if result.is_ok():
     value = result.unwrap()  # type: float
-
-# Repository Example
-class UserRepo(Repository[User]):
-    def find_by_id(self, id: str) -> Result[User, Error]:
-        # Implementation
-        pass
-
-# Cache Example
-cache = Cache[str, bytes](expiry=timedelta(minutes=5))
-cache.set("key", b"value")
-value = cache.get("key")  # type: Optional[bytes]
 ```
 
 ## Running the Examples
