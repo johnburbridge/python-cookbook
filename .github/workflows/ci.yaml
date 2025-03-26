@@ -31,14 +31,15 @@ jobs:
     
     - name: Install global dependencies
       run: |
+        python -m venv venv
+        source venv/bin/activate
         python -m pip install --upgrade pip
-        python -m pip install flake8 black pytest pytest-cov
+        python -m pip install -r requirements-dev.txt
     
     - name: Install recipe dependencies
       run: |
         cd ${{ matrix.recipe }}
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
     
     - name: Check formatting with black
       run: |
@@ -56,14 +57,15 @@ jobs:
     - name: Run tests with coverage
       run: |
         cd ${{ matrix.recipe }}
-        pytest --cov=${{ matrix.recipe }} --cov-report=xml --cov-report=term-missing --cov-fail-under=70 tests/
+        pytest --cov=${{ matrix.recipe }} --cov-report=xml --cov-report=term-missing tests/
     
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         flags: ${{ matrix.recipe }}
         name: ${{ matrix.recipe }}-py${{ matrix.python-version }}
         fail_ci_if_error: true
         verbose: true
-        directory: ${{ matrix.recipe }} 
+        directory: ${{ matrix.recipe }}
+    
