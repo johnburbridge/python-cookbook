@@ -5,9 +5,9 @@ This repository contains a collection of Python projects that exemplify common o
 ## Recipes
 
 ### Design Patterns
-1. [The Strategy Pattern](./strategy_pattern/README.md)
-2. The Factory Pattern
-3. The Builder Pattern
+1. [The Strategy Pattern](./strategy_pattern/README.md) - Implemented
+2. [The Factory Pattern](./factory_pattern/README.md) - Implemented
+3. [The Builder Pattern](./builder_pattern/README.md) - Implemented
 4. The Observable Pattern
 
 ### Beginner Topics
@@ -38,3 +38,22 @@ This repository contains a collection of Python projects that exemplify common o
 25. Performance Optimization
 26. Memory Management
 27. Cython Integration
+
+## Project Structure
+
+Each recipe follows a consistent structure:
+
+```
+.
+├── <pattern_name>/
+│   ├── README.md
+│   ├── <pattern_name>/
+│   ├── tests/
+│   ├── main.py
+│   └── requirements.txt
+```
+
+Where:
+- README.md contains detailed notes about the recipe, including implementation details and usage examples
+- main.py provides a demonstration of the pattern in action
+- tests/ contains unit tests that validate the implementation
