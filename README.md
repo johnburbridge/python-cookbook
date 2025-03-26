@@ -8,7 +8,7 @@ This repository contains a collection of Python projects that exemplify common o
 1. [The Strategy Pattern](./strategy_pattern/README.md) - Implemented
 2. [The Factory Pattern](./factory_pattern/README.md) - Implemented
 3. [The Builder Pattern](./builder_pattern/README.md) - Implemented
-4. The Observable Pattern
+4. [The Observable Pattern](./observable_pattern/README.md) - Implemented
 
 ### Beginner Topics
 5. Generics in Python
