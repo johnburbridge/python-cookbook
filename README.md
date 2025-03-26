@@ -11,7 +11,7 @@ This repository contains a collection of Python projects that exemplify common o
 - [x] [The Observable Pattern](./observable_pattern/README.md)
 
 ### Beginner Topics
-- [ ] Generics in Python
+- [x] [Generics in Python](./generics/README.md)
 - [ ] Reading and writing JSON
 - [ ] Reading and writing YAML
 - [ ] Handling HTTP Requests
