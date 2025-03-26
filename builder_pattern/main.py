@@ -4,7 +4,11 @@ This script demonstrates the Builder Pattern with different meal builders.
 It shows both the classic Builder Pattern with a Director and a Fluent Builder implementation.
 """
 from builder_pattern.meal import MealItem
-from builder_pattern.concrete_builders import RegularMealBuilder, VegetarianMealBuilder, ChildrenMealBuilder
+from builder_pattern.concrete_builders import (
+    RegularMealBuilder,
+    VegetarianMealBuilder,
+    ChildrenMealBuilder,
+)
 from builder_pattern.meal_director import MealDirector, MealConfig
 from builder_pattern.fluent_builder import FluentMealBuilder
 
@@ -14,36 +18,38 @@ def demonstrate_classic_builder():
     Demonstrate the classic Builder Pattern with Director.
     """
     print("\n=== CLASSIC BUILDER PATTERN DEMONSTRATION ===\n")
-    
+
     # Create builders
     regular_builder = RegularMealBuilder()
     vegetarian_builder = VegetarianMealBuilder()
     children_builder = ChildrenMealBuilder()
-    
+
     # Create director
     director = MealDirector()
-    
+
     # Build a regular basic meal
     director.set_builder(regular_builder)
     basic_meal = director.construct_basic_meal(name="Basic Burger Meal", price=8.99)
     print(basic_meal.display())
     print()
-    
+
     # Build a regular standard meal
-    standard_meal = director.construct_standard_meal(name="Standard Burger Meal", price=12.99)
+    standard_meal = director.construct_standard_meal(
+        name="Standard Burger Meal", price=12.99
+    )
     print(standard_meal.display())
     print()
-    
+
     # Build a premium vegetarian meal
     director.set_builder(vegetarian_builder)
     premium_vegetarian = director.construct_premium_meal(
-        name="Premium Vegetarian Meal", 
+        name="Premium Vegetarian Meal",
         price=15.99,
-        description="A complete vegetarian dining experience with all the extras."
+        description="A complete vegetarian dining experience with all the extras.",
     )
     print(premium_vegetarian.display())
     print()
-    
+
     # Build a children's meal with custom configuration using the MealConfig
     director.set_builder(children_builder)
     kids_meal_config = MealConfig(
@@ -54,7 +60,7 @@ def demonstrate_classic_builder():
         side_dish=True,
         drink=True,
         dessert=True,
-        extras=True
+        extras=True,
     )
     custom_kids_meal = director.construct_custom_meal(kids_meal_config)
     print(custom_kids_meal.display())
@@ -66,7 +72,7 @@ def demonstrate_fluent_builder():
     Demonstrate the Fluent Builder Pattern.
     """
     print("\n=== FLUENT BUILDER PATTERN DEMONSTRATION ===\n")
-    
+
     # Create a custom meal using the fluent builder
     custom_meal = (
         FluentMealBuilder()
@@ -81,7 +87,7 @@ def demonstrate_fluent_builder():
     )
     print(custom_meal.display())
     print()
-    
+
     # Create a vegetarian meal using the fluent builder
     vegetarian_meal = (
         FluentMealBuilder()
@@ -91,19 +97,15 @@ def demonstrate_fluent_builder():
         .with_side_dish(MealItem.SALAD)
         .with_drink(MealItem.JUICE)
         .with_dessert(MealItem.FRUIT)
-        .with_nutrition_info({
-            "calories": 750,
-            "protein": 22,
-            "carbs": 110,
-            "fat": 20,
-            "fiber": 12
-        })
+        .with_nutrition_info(
+            {"calories": 750, "protein": 22, "carbs": 110, "fat": 20, "fiber": 12}
+        )
         .vegetarian()
         .build()
     )
     print(vegetarian_meal.display())
     print()
-    
+
     # Create a kids meal using the fluent builder
     kids_meal = (
         FluentMealBuilder()
@@ -126,14 +128,16 @@ def main():
     """
     print("Builder Pattern Demo")
     print("===================")
-    print("This demo shows how to use the Builder Pattern to create complex meal objects.")
-    
+    print(
+        "This demo shows how to use the Builder Pattern to create complex meal objects."
+    )
+
     # Demonstrate the classic Builder Pattern
     demonstrate_classic_builder()
-    
+
     # Demonstrate the Fluent Builder Pattern
     demonstrate_fluent_builder()
 
 
 if __name__ == "__main__":
-    main() 
+    main()

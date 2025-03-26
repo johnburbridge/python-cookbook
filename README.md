@@ -2,6 +2,34 @@
 
 This repository contains a collection of Python projects that exemplify common operations and design patterns in Python. It serves as a quick reference guide with practical examples (recipes) of how to implement frequently used libraries and design patterns in Python 3.11+.
 
+## Development Setup
+
+### Requirements
+- Python 3.11+
+- pip (Python package installer)
+
+### Getting Started
+1. Clone the repository
+2. Install development dependencies:
+   ```bash
+   pip install -r requirements-dev.txt
+   ```
+
+### Code Quality
+This project uses several tools to maintain code quality:
+- **black**: Code formatting
+- **flake8**: Code linting
+- **pytest**: Testing framework
+- **pytest-cov**: Test coverage reporting
+
+### Continuous Integration
+The project uses GitHub Actions for CI, which runs on every push to main and pull requests:
+- Runs tests against Python 3.11 and 3.12
+- Enforces code formatting with black
+- Runs linting with flake8
+- Requires 70% test coverage
+- Reports coverage to Codecov
+
 ## Recipes
 
 ### Design Patterns
