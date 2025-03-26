@@ -5,39 +5,39 @@ This repository contains a collection of Python projects that exemplify common o
 ## Recipes
 
 ### Design Patterns
-1. [The Strategy Pattern](./strategy_pattern/README.md) - Implemented
-2. [The Factory Pattern](./factory_pattern/README.md) - Implemented
-3. [The Builder Pattern](./builder_pattern/README.md) - Implemented
-4. [The Observable Pattern](./observable_pattern/README.md) - Implemented
+- [x] [The Strategy Pattern](./strategy_pattern/README.md) - Implemented
+- [x] [The Factory Pattern](./factory_pattern/README.md) - Implemented
+- [x] [The Builder Pattern](./builder_pattern/README.md) - Implemented
+- [x] [The Observable Pattern](./observable_pattern/README.md) - Implemented
 
 ### Beginner Topics
-5. Generics in Python
-6. Reading and writing JSON
-7. Reading and writing YAML
-8. Handling HTTP Requests
-9. Data classes
-10. Error Handling and Logging
-11. Context Managers (with statement)
-12. Decorators
+- [ ] Generics in Python
+- [ ] Reading and writing JSON
+- [ ] Reading and writing YAML
+- [ ] Handling HTTP Requests
+- [ ] Data classes
+- [ ] Error Handling and Logging
+- [ ] Context Managers (with statement)
+- [ ] Decorators
 
 ### Intermediate Topics
-13. Reading and writing from/to Postgres
-14. Reading and writing from/to MongoDB
-15. Reading and writing from/to Redis
-16. Type Hinting and Static Type Checking
-17. Functional Programming
-18. Packaging and Distribution
-19. API Development with FastAPI
-20. Concurrent Processing (Threading vs Multiprocessing)
-21. Property-Based Testing
-22. Event-Driven Programming
+- [ ] Reading and writing from/to Postgres
+- [ ] Reading and writing from/to MongoDB
+- [ ] Reading and writing from/to Redis
+- [ ] Type Hinting and Static Type Checking
+- [ ] Functional Programming
+- [ ] Packaging and Distribution
+- [ ] API Development with FastAPI
+- [ ] Concurrent Processing (Threading vs Multiprocessing)
+- [ ] Property-Based Testing
+- [ ] Event-Driven Programming
 
 ### Advanced Topics
-23. Asynchronous Programming (asyncio)
-24. Metaprogramming
-25. Performance Optimization
-26. Memory Management
-27. Cython Integration
+- [ ] Asynchronous Programming (asyncio)
+- [ ] Metaprogramming
+- [ ] Performance Optimization
+- [ ] Memory Management
+- [ ] Cython Integration
 
 ## Project Structure
 
