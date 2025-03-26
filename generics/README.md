@@ -1,10 +1,12 @@
-# Generics in Python
+# Python Generic Types Examples
 
-This section demonstrates the use of generics in Python using type hints and the `typing` module. We'll explore various aspects of generic programming through practical examples.
+This project demonstrates the implementation of generic types in Python, showcasing type-safe programming patterns commonly found in languages like Rust and Scala.
 
-## Stack[T] - Generic Stack Implementation
+## Implementations
 
-### Diagram
+### Stack[T]
+
+A generic stack implementation that can hold elements of any type. The stack is implemented using a list and provides type-safe operations.
 
 ```mermaid
 classDiagram
@@ -12,140 +14,137 @@ classDiagram
         -items: List[T]
         +push(item: T)
         +pop() T
-        +peek() Optional[T]
+        +peek() T
         +is_empty() bool
-        +size() int
         +__iter__() Iterator[T]
     }
-    class T {
-        <<parameter>>
-    }
-    Stack --> "0..*" T : contains
 ```
 
-### Overview
-
-A generic stack implementation that can work with any type. Key features:
+Features:
 - Type-safe push and pop operations
-- Optional peek that handles empty stacks
-- Iterable interface for traversing elements
-- Comprehensive string representations
+- Peek at the top element without removing it
+- Iterator support for traversing elements
+- Empty stack handling with descriptive errors
 
-## Result[T, E] - Generic Error Handling
+### Result[T, E]
 
-### Diagram
+A type-safe error handling mechanism similar to Rust's Result type. It represents either success (Ok) or failure (Err).
 
 ```mermaid
 classDiagram
-    class Result~T, E~ {
-        -value: Optional[T]
-        -error: Optional[E]
-        +ok(value: T)$ Result[T, E]
-        +err(error: E)$ Result[T, E]
+    class Result~T,E~ {
+        -_value: Optional[T]
+        -_error: Optional[E]
+        -_has_value: bool
+        +ok(value: T)$ Result[T,Any]
+        +err(error: E)$ Result[Any,E]
         +is_ok() bool
         +is_err() bool
         +unwrap() T
         +unwrap_err() E
-        +map(op: Callable[[T], U]) Result[U, E]
+        +map(op: Callable[[T],T]) Result[T,E]
+        +and_then(op: Callable[[T],Result[T,E]]) Result[T,E]
     }
-    class T {
-        <<success>>
-    }
-    class E {
-        <<error>>
-    }
-    Result --> "0..1" T : success
-    Result --> "0..1" E : failure
 ```
 
-### Overview
+Features:
+- Type-safe error handling without exceptions
+- Method chaining with `map` and `and_then`
+- Default value handling with `unwrap_or` and `unwrap_or_else`
+- Custom error messages with `expect` and `expect_err`
+- Proper handling of `None` values with clear error messages
 
-A type-safe error handling mechanism inspired by Rust's Result type. Key features:
-- Explicit error handling without exceptions
-- Type-safe success and error values
-- Chainable operations with map and and_then
-- Rich set of unwrap operations
+### Repository[T]
 
-## Implementation Details
+A generic repository pattern implementation with bounded type parameters and protocols.
 
-We're implementing several generic types to demonstrate different aspects of generic programming:
+```mermaid
+classDiagram
+    class Identifiable {
+        <<Protocol>>
+        +id: str
+    }
+    class Repository~T~ {
+        <<Abstract>>
+        +find_by_id(id: str) Result[T,RepositoryError]
+        +find_all() Result[List[T],RepositoryError]
+        +save(entity: T) Result[T,RepositoryError]
+        +delete(id: str) Result[Unit,RepositoryError]
+    }
+    class InMemoryRepository~T~ {
+        -_items: Dict[str,T]
+    }
+    class Unit {
+        +__eq__(other: object) bool
+        +__repr__() str
+    }
+    class RepositoryError {
+        +message: str
+        +code: str
+        +not_found(id: str)$ RepositoryError
+        +already_exists(id: str)$ RepositoryError
+        +validation_error(message: str)$ RepositoryError
+    }
 
-1. **Stack[T]**: A generic stack data structure
-   - Demonstrates basic generic class implementation
-   - Shows type-safe operations on a collection
-   - Implements standard container protocols
-
-2. **Result[T, E]**: A type-safe error handling mechanism
-   - Shows multiple type parameters
-   - Implements the Railway-oriented programming pattern
-   - Provides a functional approach to error handling
-
-3. **Repository[T]**: A generic data access interface _(Coming Soon)_
-   - Demonstrates generic protocols
-   - Shows bounded type parameters
-   - Implements the Repository pattern
-
-4. **Cache[K, V]**: A generic key-value cache _(Coming Soon)_
-   - Shows multiple type parameters with different roles
-   - Implements time-based expiration
-   - Demonstrates type constraints
-
-## Example Usage
-
-```python
-# Stack Example
-numbers = Stack[int]()
-numbers.push(1)
-numbers.push(2)
-top = numbers.pop()  # type: int
-
-# Result Example
-def divide(a: float, b: float) -> Result[float, str]:
-    if b == 0:
-        return Result.err("Division by zero")
-    return Result.ok(a / b)
-
-result = divide(10, 2)
-if result.is_ok():
-    value = result.unwrap()  # type: float
+    Repository <|-- InMemoryRepository
+    Repository ..> Identifiable : requires
+    Repository ..> Unit : uses
+    Repository ..> RepositoryError : uses
 ```
+
+Features:
+- Type-safe repository operations with bounded type parameters
+- Protocol-based interface for entities with IDs
+- Comprehensive error handling using `Result` type
+- Unit type for void operations (e.g., delete)
+- In-memory implementation for testing and examples
+
+## Usage Examples
+
+The project includes comprehensive examples and tests demonstrating:
+
+1. Stack operations with different types:
+   - Integer stacks for numeric operations
+   - String stacks for text processing
+   - List stacks for complex data structures
+
+2. Result type for error handling:
+   - Division with zero checks
+   - String parsing with error handling
+   - Operation chaining with `map` and `and_then`
+
+3. Repository pattern with generic types:
+   - CRUD operations with type safety
+   - Error handling for common scenarios
+   - Working with multiple entity types
+   - Validation and business logic examples
 
 ## Running the Examples
 
-To run the demonstration:
-
 ```bash
+# Run all tests
+PYTHONPATH=. python -m pytest -v
+
+# Run the main examples
 python -m generics.main
 ```
 
-## Running Tests
+## Design Decisions
 
-To run the tests with type checking:
+1. **Immutable Entities**: Entity classes (e.g., `User`, `Post`) are implemented as frozen dataclasses to ensure thread safety and enable use in sets and as dictionary keys.
 
-```bash
-python -m pytest --mypy
-```
+2. **Unit Type**: Instead of using `None` for void operations, we use a proper `Unit` type to make the absence of a return value explicit and type-safe.
 
-## Best Practices
+3. **Result Type**: Our `Result` implementation enforces proper initialization and provides clear error messages when misused. It supports both value and error type parameters for maximum flexibility.
 
-1. **Type Variable Naming**
-   - Use single uppercase letters (T, K, V) for simple type variables
-   - Use descriptive names for complex types (Key, Value, Error)
+4. **Type Safety**: All implementations use Python's type hints and generics to provide compile-time type checking when used with a type checker like mypy.
 
-2. **Constraints**
-   - Use bounded type variables when operations require specific methods
-   - Document type constraints in docstrings
+## Contributing
 
-3. **Error Handling**
-   - Return Optional[T] when operations can fail
-   - Use Result[T, E] for operations with error details
+Feel free to contribute by:
+1. Adding new generic type implementations
+2. Improving existing implementations
+3. Adding more examples and test cases
+4. Enhancing documentation
 
-4. **Documentation**
-   - Document type parameters in class and function docstrings
-   - Include examples with type annotations
-
-## Requirements
-
-- Python 3.11+
-- mypy
-- pytest 
+Please ensure all tests pass and add appropriate documentation for new features. 
