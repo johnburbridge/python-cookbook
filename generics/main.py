@@ -5,14 +5,8 @@ Example usage of generic types in Python.
 from dataclasses import dataclass, field
 from typing import List
 from generics.stack import Stack
-from generics.result import Result, Ok, Err
-from generics.repository import (
-    Repository,
-    InMemoryRepository,
-    Identifiable,
-    RepositoryError,
-)
-from uuid import uuid4
+from generics.result import Result
+from generics.repository import Repository, InMemoryRepository
 
 
 def demonstrate_stack() -> None:
@@ -189,7 +183,10 @@ def demonstrate_repository() -> None:
 
     # Create a post
     post = Post(
-        _id="1", title="Hello World", content="This is my first post", author_id="2"
+        _id="1",
+        title="Hello World",
+        content="This is my first post",
+        author_id="2",
     )
     result = post_repo.save(post)
     if result.is_ok():
@@ -198,8 +195,7 @@ def demonstrate_repository() -> None:
     # Find all posts
     result = post_repo.find_all()
     if result.is_ok():
-        posts = result.unwrap()
-        print(f"Found {len(posts)} posts")
+        print("All posts:", result.unwrap())
 
 
 def main() -> None:

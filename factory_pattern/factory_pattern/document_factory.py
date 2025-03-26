@@ -1,68 +1,53 @@
-from enum import Enum, auto
-from typing import Dict, Type, Optional
+"""Document factory implementation."""
 
+from typing import Dict, Type
 from .document import Document
 from .document_types import (
     PDFDocument,
     WordDocument,
     HTMLDocument,
-    MarkdownDocument,
-    TextDocument,
 )
 
 
-class DocumentType(Enum):
-    """
-    Enum representing different document types.
-    """
-
-    PDF = auto()
-    WORD = auto()
-    HTML = auto()
-
-
 class DocumentFactory:
-    """
-    Factory class that creates document objects.
-    This is a simple factory implementation.
-    """
+    """Factory for creating different types of documents."""
 
-    # Mapping of document types to their respective classes
-    _document_types: Dict[DocumentType, Type[Document]] = {
-        DocumentType.PDF: PDFDocument,
-        DocumentType.WORD: WordDocument,
-        DocumentType.HTML: HTMLDocument,
+    _document_types: Dict[str, Type[Document]] = {
+        "pdf": PDFDocument,
+        "word": WordDocument,
+        "html": HTMLDocument,
     }
 
     @classmethod
-    def create_document(
-        cls, doc_type: DocumentType, title: str, author: str, content: str = ""
-    ) -> Document:
+    def create_document(cls, doc_type: str, title: str, content: str) -> Document:
         """
         Create a document of the specified type.
 
         Args:
-            doc_type: The type of document to create
-            title: The title of the document
-            author: The author of the document
-            content: The content of the document (default is empty string)
+            doc_type: The type of document to create (pdf, word, html)
+            title: The document title
+            content: The document content
 
         Returns:
-            Document: A document of the specified type
+            A new document instance of the specified type
 
         Raises:
             ValueError: If the document type is not supported
         """
-        document_class = cls._document_types.get(doc_type)
+        doc_type = doc_type.lower()
+        if doc_type not in cls._document_types:
+            supported = ", ".join(cls._document_types.keys())
+            raise ValueError(
+                f"Unsupported document type: {doc_type}. "
+                f"Supported types are: {supported}"
+            )
 
-        if document_class is None:
-            raise ValueError(f"Unsupported document type: {doc_type}")
-
-        return document_class(title, author, content)
+        document_class = cls._document_types[doc_type]
+        return document_class(title, content)
 
     @classmethod
     def register_document_type(
-        cls, doc_type: DocumentType, document_class: Type[Document]
+        cls, doc_type: str, document_class: Type[Document]
     ) -> None:
         """
         Register a new document type.
@@ -74,11 +59,11 @@ class DocumentFactory:
         cls._document_types[doc_type] = document_class
 
     @classmethod
-    def get_registered_types(cls) -> Dict[DocumentType, Type[Document]]:
+    def get_registered_types(cls) -> Dict[str, Type[Document]]:
         """
         Get all registered document types.
 
         Returns:
-            Dict[DocumentType, Type[Document]]: A dictionary mapping document types to their classes
+            A dictionary mapping document types to their classes
         """
         return cls._document_types.copy()

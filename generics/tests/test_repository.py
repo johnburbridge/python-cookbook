@@ -3,18 +3,14 @@ Tests for the generic Repository implementation.
 """
 
 from dataclasses import dataclass, field
-from typing import Dict
-import pytest
-from typing import List
+from uuid import UUID, uuid4
 from generics.repository import (
     Repository,
     InMemoryRepository,
     RepositoryError,
-    Identifiable,
     Unit,
 )
-from generics.result import Result, Ok, Err
-from uuid import UUID, uuid4
+from generics.result import Result
 
 
 @dataclass(frozen=True)
@@ -201,7 +197,7 @@ def test_practical_example() -> None:
     assert result.is_ok()
     post = result.unwrap()
 
-    # Test invalid title
+    # Test invalid post creation
     result = create_post("Hi", "Too short title")
     assert result.is_err()
     error = result.unwrap_err()
@@ -210,6 +206,11 @@ def test_practical_example() -> None:
     # Test content update
     result = update_content(post.id, "Updated content")
     assert result.is_ok()
-    updated = result.unwrap()
-    assert updated.content == "Updated content"
-    assert updated.title == "Hello World"  # Title unchanged
+    updated_post = result.unwrap()
+    assert updated_post.content == "Updated content"
+
+    # Test update with invalid ID
+    result = update_content(uuid4(), "This should fail")
+    assert result.is_err()
+    error = result.unwrap_err()
+    assert error.code == "NOT_FOUND"

@@ -1,26 +1,29 @@
+"""Base document class for the Factory Pattern example."""
+
 from abc import ABC, abstractmethod
 from typing import Dict, Any, Optional
 
 
 class Document(ABC):
     """
-    The Document interface (Product) that defines operations all concrete document types must implement.
-    This is the base class for all document types.
+    Abstract base class for all document types.
+
+    This class defines the common interface for all document types.
     """
 
-    def __init__(self, title: str, author: str, content: str = ""):
+    def __init__(self, title: str, author: str, content: str = "") -> None:
         """
-        Initialize a document with basic metadata.
+        Initialize a new document.
 
         Args:
-            title: The title of the document
-            author: The author of the document
-            content: The content of the document (default is empty string)
+            title: The document title
+            author: The document author
+            content: The document content (default is empty string)
         """
         self.title = title
         self.author = author
         self.content = content
-        self.metadata: Dict[str, Any] = {
+        self._metadata: Dict[str, Any] = {
             "title": title,
             "author": author,
         }
@@ -33,7 +36,7 @@ class Document(ABC):
             key: The metadata key
             value: The metadata value
         """
-        self.metadata[key] = value
+        self._metadata[key] = value
 
     def get_metadata(self, key: str) -> Optional[Any]:
         """
@@ -45,15 +48,15 @@ class Document(ABC):
         Returns:
             Optional[Any]: The metadata value or None if the key doesn't exist
         """
-        return self.metadata.get(key)
+        return self._metadata.get(key)
 
     @abstractmethod
-    def generate(self) -> str:
+    def create(self) -> str:
         """
-        Generate the document in its specific format.
+        Create the document content.
 
         Returns:
-            str: A string representation of the document
+            The formatted document content
         """
         pass
 

@@ -2,10 +2,9 @@
 Concrete Subject implementation for the weather monitoring system.
 """
 
-from typing import Dict, Any
-
-from .subject import Subject
-from observable_pattern.observer import Observer
+from typing import List
+from .observer import Subject
+from .weather_displays import WeatherObserver
 
 
 class WeatherStation(Subject):
@@ -14,14 +13,15 @@ class WeatherStation(Subject):
     and notifies observers when the data changes.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initialize the weather station with default values.
         """
         super().__init__()
-        self._temperature = 0.0
-        self._humidity = 0.0
-        self._pressure = 0.0
+        self._temperature: float = 0.0
+        self._humidity: float = 0.0
+        self._pressure: float = 0.0
+        self._observers: List[WeatherObserver] = []
 
     @property
     def temperature(self) -> float:
@@ -39,22 +39,23 @@ class WeatherStation(Subject):
         return self._pressure
 
     def set_measurements(
-        self, temperature: float, humidity: float, pressure: float
+        self,
+        temperature: float,
+        humidity: float,
+        pressure: float,
     ) -> None:
         """
-        Update weather measurements and notify all observers.
+        Set new weather measurements.
 
         Args:
-            temperature: The new temperature in degrees Fahrenheit
-            humidity: The new humidity percentage
-            pressure: The new barometric pressure
+            temperature: The current temperature in Fahrenheit
+            humidity: The current humidity percentage
+            pressure: The current pressure in inches of mercury
         """
         self._temperature = temperature
         self._humidity = humidity
         self._pressure = pressure
-
-        # Notify observers of the change with the new data
-        self.measurements_changed()
+        self.notify_observers()
 
     def measurements_changed(self) -> None:
         """

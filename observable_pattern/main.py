@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-This script demonstrates the Observable Pattern using a weather station and various display elements.
-It shows how observers can subscribe to changes from a subject and be notified automatically.
+This script demonstrates the Observable Pattern using a weather station and
+various display elements. It shows how observers can subscribe to changes
+from a subject and be notified automatically.
 """
 from observable_pattern.weather_station import WeatherStation
 from observable_pattern.weather_displays import (
@@ -25,6 +26,9 @@ def demonstrate_observer_pattern():
     current_display = CurrentConditionsDisplay(weather_station)
     statistics_display = StatisticsDisplay(weather_station)
     forecast_display = ForecastDisplay(weather_station)
+    print(f"Created displays: {current_display.__class__.__name__}, "
+          f"{statistics_display.__class__.__name__}, "
+          f"{forecast_display.__class__.__name__}")
 
     print("\n--- Initial Weather Update ---")
     # Weather data changes, observers are notified automatically
@@ -37,6 +41,7 @@ def demonstrate_observer_pattern():
     print("\n--- Adding Heat Index Display ---")
     # Add a new observer at runtime
     heat_index_display = HeatIndexDisplay(weather_station)
+    print(f"Added {heat_index_display.__class__.__name__}")
 
     print("\n--- Third Weather Update (All Displays) ---")
     # Now all four displays will update
@@ -60,44 +65,48 @@ def demonstrate_push_vs_pull():
     weather_station = WeatherStation()
 
     print(
-        "Push Model: CurrentConditionsDisplay receives data directly in update() method"
+        "Push Model: CurrentConditionsDisplay receives data directly in "
+        "update() method"
     )
-    print("Pull Model: StatisticsDisplay requests data directly from the subject\n")
+    print(
+        "Pull Model: StatisticsDisplay requests data directly from the "
+        "subject\n"
+    )
 
     current_display = CurrentConditionsDisplay(weather_station)
     statistics_display = StatisticsDisplay(weather_station)
+    print(f"Created displays: {current_display.__class__.__name__}, "
+          f"{statistics_display.__class__.__name__}")
 
     print("--- Weather Update (Both Models) ---")
     weather_station.set_measurements(75, 60, 30.1)
 
 
 def main() -> None:
-    # Create the WeatherStation subject
+    """Run the weather station demo."""
+    print("=== Weather Station Demo ===\n")
+
+    # Create the WeatherStation (the Subject)
     weather_station = WeatherStation()
 
-    # Create displays and register them with the WeatherStation
-    current_display = CurrentConditionsDisplay(weather_station)
-    statistics_display = StatisticsDisplay(weather_station)
+    # Create and register the display elements (the Observers)
+    CurrentConditionsDisplay(weather_station)
+    StatisticsDisplay(weather_station)
     forecast_display = ForecastDisplay(weather_station)
-    heat_index_display = HeatIndexDisplay(weather_station)
+    HeatIndexDisplay(weather_station)
 
-    # Simulate weather changes
-    print("\nWeather Station Demo")
-    print("------------------")
-    
-    print("\nInitial weather update:")
+    print("Initial weather measurements:")
     weather_station.set_measurements(80, 65, 30.4)
-    
-    print("\nWeather is getting warmer:")
+
+    print("\nWeather update 1:")
     weather_station.set_measurements(82, 70, 29.2)
-    
-    print("\nA cold front moves in:")
+
+    print("\nWeather update 2:")
     weather_station.set_measurements(78, 90, 29.2)
 
-    # Unregister some displays
-    print("\nUnregistering CurrentConditionsDisplay and StatisticsDisplay")
-    weather_station.remove_observer(current_display)
-    weather_station.remove_observer(statistics_display)
+    # Demonstrate unregistering observers
+    print("\nUnregistering forecast display...")
+    forecast_display.unregister()
 
     print("\nFinal weather update:")
     weather_station.set_measurements(62, 90, 28.1)

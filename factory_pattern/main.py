@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 This script demonstrates the Factory Pattern with document generation.
-It creates different types of documents (PDF, Word, HTML) using a document factory.
+It creates different types of documents (PDF, Word, HTML) using a document
+factory.
 """
 import os
 import tempfile
@@ -18,7 +19,10 @@ def main():
     # Create document title and author
     title = "The Factory Pattern"
     author = "Design Patterns"
-    content = "The Factory Pattern is a creational design pattern that provides an interface for creating objects."
+    content = (
+        "The Factory Pattern is a creational design pattern that provides "
+        "an interface for creating objects."
+    )
 
     # Create documents of different types
     print("Creating documents of different types...\n")
@@ -129,9 +133,13 @@ def main():
 
     # Demonstrate registering a new document type
     print("\nRegistering a custom document type would work like this:")
-    print("DocumentFactory.register_document_type(DocumentType.CUSTOM, CustomDocument)")
     print(
-        "custom_doc = DocumentFactory.create_document(DocumentType.CUSTOM, title, author, content)"
+        "DocumentFactory.register_document_type("
+        "DocumentType.CUSTOM, CustomDocument)"
+    )
+    print(
+        "custom_doc = DocumentFactory.create_document("
+        "DocumentType.CUSTOM, title, author, content)"
     )
 
 

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 This script demonstrates the Builder Pattern with different meal builders.
-It shows both the classic Builder Pattern with a Director and a Fluent Builder implementation.
+It shows both the classic Builder Pattern with a Director and a Fluent
+Builder implementation.
 """
 from builder_pattern.meal import MealItem
 from builder_pattern.concrete_builders import (
@@ -11,6 +12,7 @@ from builder_pattern.concrete_builders import (
 )
 from builder_pattern.meal_director import MealDirector, MealConfig
 from builder_pattern.fluent_builder import FluentMealBuilder
+from builder_pattern.meal_builder import MealBuilder
 
 
 def demonstrate_classic_builder():
@@ -122,21 +124,51 @@ def demonstrate_fluent_builder():
     print()
 
 
-def main():
-    """
-    Main function to demonstrate the Builder Pattern.
-    """
-    print("Builder Pattern Demo")
-    print("===================")
-    print(
-        "This demo shows how to use the Builder Pattern to create complex meal objects."
+def main() -> None:
+    """Run the meal builder demo."""
+    print("=== Meal Builder Demo ===\n")
+
+    # Create a builder
+    builder = MealBuilder()
+
+    # Build a breakfast meal
+    breakfast = (
+        builder.reset()
+        .add_main("Eggs Benedict")
+        .add_side("Hash Browns")
+        .add_drink("Orange Juice")
+        .add_dessert("Fresh Fruit")
+        .build()
     )
 
-    # Demonstrate the classic Builder Pattern
-    demonstrate_classic_builder()
+    print("Breakfast:")
+    print(breakfast)
 
-    # Demonstrate the Fluent Builder Pattern
-    demonstrate_fluent_builder()
+    # Build a lunch meal
+    lunch = (
+        builder.reset()
+        .add_main("Grilled Chicken Sandwich")
+        .add_side("French Fries")
+        .add_drink("Iced Tea")
+        .build()
+    )
+
+    print("\nLunch:")
+    print(lunch)
+
+    # Build a dinner meal
+    dinner = (
+        builder.reset()
+        .add_main("Steak")
+        .add_side("Mashed Potatoes")
+        .add_side("Steamed Vegetables")
+        .add_drink("Red Wine")
+        .add_dessert("Chocolate Cake")
+        .build()
+    )
+
+    print("\nDinner:")
+    print(dinner)
 
 
 if __name__ == "__main__":
