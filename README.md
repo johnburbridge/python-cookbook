@@ -5,10 +5,10 @@ This repository contains a collection of Python projects that exemplify common o
 ## Recipes
 
 ### Design Patterns
-- [x] [The Strategy Pattern](./strategy_pattern/README.md) - Implemented
-- [x] [The Factory Pattern](./factory_pattern/README.md) - Implemented
-- [x] [The Builder Pattern](./builder_pattern/README.md) - Implemented
-- [x] [The Observable Pattern](./observable_pattern/README.md) - Implemented
+- [x] [The Strategy Pattern](./strategy_pattern/README.md)
+- [x] [The Factory Pattern](./factory_pattern/README.md)
+- [x] [The Builder Pattern](./builder_pattern/README.md)
+- [x] [The Observable Pattern](./observable_pattern/README.md)
 
 ### Beginner Topics
 - [ ] Generics in Python
