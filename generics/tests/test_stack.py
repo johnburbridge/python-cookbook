@@ -3,7 +3,7 @@ Tests for the generic Stack implementation.
 """
 import pytest
 from typing import List
-from ..generics.stack import Stack
+from generics.stack import Stack
 
 
 def test_stack_creation() -> None:

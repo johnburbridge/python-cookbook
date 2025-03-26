@@ -117,4 +117,9 @@ class Stack(Generic[T]):
         Returns:
             A detailed string representation of the stack.
         """
-        return f"Stack[{T.__name__ if hasattr(T, '__name__') else '?'}]({self._items})" 
+        type_name = self._items.__class__.__name__
+        if type_name == "list":
+            # Get the type argument from the first item if available
+            if self._items:
+                type_name = self._items[0].__class__.__name__
+        return f"Stack[{type_name}]({self._items})" 
