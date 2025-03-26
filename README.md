@@ -30,10 +30,11 @@ This repository contains a collection of Python projects that exemplify common o
 19. API Development with FastAPI
 20. Concurrent Processing (Threading vs Multiprocessing)
 21. Property-Based Testing
+22. Event-Driven Programming
 
 ### Advanced Topics
-22. Asynchronous Programming (asyncio)
-23. Metaprogramming
-24. Performance Optimization
-25. Memory Management
-26. Cython Integration
+23. Asynchronous Programming (asyncio)
+24. Metaprogramming
+25. Performance Optimization
+26. Memory Management
+27. Cython Integration
