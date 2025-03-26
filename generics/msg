@@ -1,0 +1,17 @@
+This PR adds a generic Repository pattern implementation to demonstrate bounded type parameters and protocols in Python.
+
+Key Features:
+- Generic Repository[T, ID] interface with bounded type parameters
+- InMemoryRepository implementation for testing and examples
+- Comprehensive tests for different ID types (string, UUID, int)
+- Example usage with User and Post entities
+- Integration with existing Result[T, E] type for error handling
+
+Technical Highlights:
+- Type-safe operations with compile-time checking
+- Protocol-based design with Identifiable[ID]
+- Proper error handling using Result type
+- Comprehensive test coverage
+- Clear examples in main.py
+
+All tests are passing and the code is well-documented with examples.

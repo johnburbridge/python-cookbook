@@ -1,18 +1,21 @@
+"""Payment strategy interface."""
+
 from abc import ABC, abstractmethod
+from decimal import Decimal
+
 
 class PaymentStrategy(ABC):
-    """
-    Strategy interface that declares the method all concrete payment strategies must implement.
-    """
+    """Abstract base class for payment strategies."""
+
     @abstractmethod
-    def pay(self, amount: float) -> bool:
+    def pay(self, amount: Decimal) -> bool:
         """
-        Process a payment of the given amount.
-        
+        Process a payment.
+
         Args:
-            amount: The amount to pay in the appropriate currency.
-            
+            amount: The payment amount
+
         Returns:
-            bool: True if payment was successful, False otherwise.
+            True if payment was successful, False otherwise
         """
-        pass 
+        pass

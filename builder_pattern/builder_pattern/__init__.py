@@ -10,19 +10,19 @@ from builder_pattern.meal_builder import MealBuilder
 from builder_pattern.concrete_builders import (
     RegularMealBuilder,
     VegetarianMealBuilder,
-    ChildrenMealBuilder
+    ChildrenMealBuilder,
 )
 from builder_pattern.meal_director import MealDirector, MealConfig
 from builder_pattern.fluent_builder import FluentMealBuilder
 
 __all__ = [
-    'Meal',
-    'MealItem',
-    'MealBuilder',
-    'RegularMealBuilder',
-    'VegetarianMealBuilder',
-    'ChildrenMealBuilder',
-    'MealDirector',
-    'MealConfig',
-    'FluentMealBuilder'
-] 
+    "Meal",
+    "MealItem",
+    "MealBuilder",
+    "RegularMealBuilder",
+    "VegetarianMealBuilder",
+    "ChildrenMealBuilder",
+    "MealDirector",
+    "MealConfig",
+    "FluentMealBuilder",
+]
