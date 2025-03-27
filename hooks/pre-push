@@ -1,0 +1,61 @@
+#!/bin/bash
+
+# Exit on error
+set -e
+
+# Get the root directory of the repository
+ROOT_DIR=$(git rev-parse --show-toplevel)
+
+# Get the current branch name
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+# Get the list of changed files between current branch and origin/main or origin/HEAD
+if git rev-parse --verify origin/main >/dev/null 2>&1; then
+    CHANGED_FILES=$(git diff --name-only origin/main...HEAD)
+else
+    CHANGED_FILES=$(git diff --name-only origin/HEAD...HEAD)
+fi
+
+# If no changes found, check all files in the current branch
+if [ -z "$CHANGED_FILES" ]; then
+    CHANGED_FILES=$(git ls-files)
+fi
+
+# Get unique recipe directories that have changes
+RECIPES_TO_TEST=$(echo "$CHANGED_FILES" | grep -oE '^[^/]+/' | sort -u | sed 's/\///g' || true)
+
+if [ -z "$RECIPES_TO_TEST" ]; then
+    echo "No recipe changes detected."
+    exit 0
+fi
+
+# Activate root virtual environment for task
+if [ ! -d "$ROOT_DIR/venv" ]; then
+    python3 -m venv "$ROOT_DIR/venv"
+    . "$ROOT_DIR/venv/bin/activate"
+    pip install -r "$ROOT_DIR/requirements-dev.txt"
+else
+    . "$ROOT_DIR/venv/bin/activate"
+fi
+
+# Run tests for each changed recipe
+for recipe in $RECIPES_TO_TEST; do
+    if [ -d "$ROOT_DIR/$recipe" ] && [ -f "$ROOT_DIR/$recipe/requirements.txt" ]; then
+        echo "Testing recipe: $recipe"
+        cd "$ROOT_DIR/$recipe"
+        if [ ! -d "venv" ]; then
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+        else
+            . venv/bin/activate
+        fi
+        python -m pytest tests/ -v || exit 1
+        cd "$ROOT_DIR"
+    fi
+done
+
+# Deactivate root virtual environment
+deactivate
+
+echo "All tests passed! 🚀" 

@@ -1,27 +1,17 @@
-"""
-Concrete Subject implementation for the weather monitoring system.
-"""
+"""Weather station implementation."""
 
-from typing import List
-from .observer import Subject
-from .weather_displays import WeatherObserver
+from .subject import Subject
 
 
 class WeatherStation(Subject):
-    """
-    The WeatherStation class is a concrete subject that maintains weather data
-    and notifies observers when the data changes.
-    """
+    """Weather station that notifies observers of weather changes."""
 
     def __init__(self) -> None:
-        """
-        Initialize the weather station with default values.
-        """
+        """Initialize the weather station."""
         super().__init__()
-        self._temperature: float = 0.0
-        self._humidity: float = 0.0
-        self._pressure: float = 0.0
-        self._observers: List[WeatherObserver] = []
+        self._temperature = 0.0
+        self._humidity = 0.0
+        self._pressure = 0.0
 
     @property
     def temperature(self) -> float:
@@ -39,35 +29,17 @@ class WeatherStation(Subject):
         return self._pressure
 
     def set_measurements(
-        self,
-        temperature: float,
-        humidity: float,
-        pressure: float,
+        self, temperature: float, humidity: float, pressure: float
     ) -> None:
         """
-        Set new weather measurements.
+        Update weather measurements and notify observers.
 
         Args:
-            temperature: The current temperature in Fahrenheit
-            humidity: The current humidity percentage
-            pressure: The current pressure in inches of mercury
+            temperature: Temperature in Fahrenheit
+            humidity: Relative humidity percentage
+            pressure: Barometric pressure
         """
         self._temperature = temperature
         self._humidity = humidity
         self._pressure = pressure
-        self.notify_observers()
-
-    def measurements_changed(self) -> None:
-        """
-        Notify observers when measurements have changed.
-
-        This demonstrates both push and pull models:
-        - Push: We pass the data directly to the observers
-        - Pull: Observers can use the provided reference to the subject
-          to request specific data they need
-        """
-        self.notify(
-            temperature=self._temperature,
-            humidity=self._humidity,
-            pressure=self._pressure,
-        )
+        self.notify(temperature=temperature, humidity=humidity, pressure=pressure)

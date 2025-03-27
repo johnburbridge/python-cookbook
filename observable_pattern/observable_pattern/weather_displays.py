@@ -1,37 +1,26 @@
 """Weather display implementations."""
 
-from abc import ABC
-from typing import List
-from .observer import Observer
+from typing import Any
+from .weather_observer import WeatherObserver
 from .weather_station import WeatherStation
-
-
-class WeatherObserver(Observer, ABC):
-    """Base class for weather observers."""
-
-    def __init__(self, weather_station: WeatherStation) -> None:
-        """
-        Initialize the weather observer.
-
-        Args:
-            weather_station: The weather station to observe
-        """
-        self._weather_station = weather_station
-        self._weather_station.add_observer(self)
-
-    def unregister(self) -> None:
-        """Unregister this observer from the weather station."""
-        self._weather_station.remove_observer(self)
 
 
 class CurrentConditionsDisplay(WeatherObserver):
     """Display current weather conditions."""
 
-    def update(self) -> None:
-        """Update the display with current weather conditions."""
-        temp = self._weather_station.temperature
-        humidity = self._weather_station.humidity
-        print(f"Current conditions: {temp}°F and {humidity}% humidity")
+    def __init__(self, weather_station: WeatherStation) -> None:
+        """Initialize the current conditions display."""
+        super().__init__()
+        self.weather_station = weather_station
+        self.temperature = 0.0
+        self.humidity = 0.0
+        weather_station.attach(self)
+
+    def update(self, subject: WeatherStation = None, **kwargs: Any) -> None:
+        """Update the display with current conditions."""
+        self.temperature = kwargs.get("temperature", 0.0)
+        self.humidity = kwargs.get("humidity", 0.0)
+        print(f"Current conditions: {self.temperature}°F and {self.humidity}% humidity")
 
 
 class StatisticsDisplay(WeatherObserver):
@@ -39,24 +28,37 @@ class StatisticsDisplay(WeatherObserver):
 
     def __init__(self, weather_station: WeatherStation) -> None:
         """Initialize the statistics display."""
-        super().__init__(weather_station)
-        self._temperatures: List[float] = []
-        self._humidities: List[float] = []
+        super().__init__()
+        self.weather_station = weather_station
+        self.temperatures = []
+        self.humidities = []
+        self.num_readings = 0
+        self.min_temp = float("inf")
+        self.max_temp = float("-inf")
+        self.sum_temp = 0.0
+        self.temperature_readings = []
+        weather_station.attach(self)
 
-    def update(self) -> None:
+    def update(self, subject: WeatherStation = None, **kwargs: Any) -> None:
         """Update the display with weather statistics."""
-        temp = self._weather_station.temperature
-        humidity = self._weather_station.humidity
+        temp = kwargs.get("temperature")
+        humidity = kwargs.get("humidity")
 
-        self._temperatures.append(temp)
-        self._humidities.append(humidity)
+        self.temperatures.append(temp)
+        self.humidities.append(humidity)
+        self.num_readings += 1
 
-        avg_temp = sum(self._temperatures) / len(self._temperatures)
-        avg_humidity = sum(self._humidities) / len(self._humidities)
+        self.min_temp = min(self.min_temp, temp)
+        self.max_temp = max(self.max_temp, temp)
+        self.sum_temp += temp
+        self.temperature_readings.append(temp)
+
+        avg_temp = sum(self.temperatures) / len(self.temperatures)
+        avg_humidity = sum(self.humidities) / len(self.humidities)
 
         print(
-            f"Avg/Current: Temperature {avg_temp:.1f}°F/{temp}°F, "
-            f"Humidity {avg_humidity:.1f}%/{humidity}%"
+            f"Avg/Current: Temperature {avg_temp}°F/{temp}°F, "
+            f"Humidity {avg_humidity}%/{humidity}%"
         )
 
 
@@ -65,26 +67,42 @@ class ForecastDisplay(WeatherObserver):
 
     def __init__(self, weather_station: WeatherStation) -> None:
         """Initialize the forecast display."""
-        super().__init__(weather_station)
-        self._last_pressure = 0.0
+        super().__init__()
+        self.weather_station = weather_station
+        self.current_pressure = 29.92
+        self.last_pressure = 0.0
+        weather_station.attach(self)
 
-    def update(self) -> None:
-        """Update the display with weather forecast."""
-        pressure = self._weather_station.pressure
-        forecast = "Improving" if pressure > self._last_pressure else "Worsening"
-        self._last_pressure = pressure
-        print(f"Forecast: {forecast} weather ahead")
+    def update(self, subject: WeatherStation = None, **kwargs: Any) -> None:
+        """Update the display with forecast."""
+        self.last_pressure = self.current_pressure
+        self.current_pressure = kwargs.get("pressure", 29.92)
+
+        if self.current_pressure > self.last_pressure:
+            print("Forecast: Improving weather on the way!")
+        elif self.current_pressure < self.last_pressure:
+            print("Forecast: Watch out for cooler, rainy weather")
+        else:
+            print("Forecast: More of the same")
 
 
 class HeatIndexDisplay(WeatherObserver):
     """Display heat index."""
 
-    def update(self) -> None:
+    def __init__(self, weather_station: WeatherStation) -> None:
+        """Initialize the heat index display."""
+        super().__init__()
+        self.weather_station = weather_station
+        self.heat_index = 0.0
+        weather_station.attach(self)
+
+    def update(self, subject: WeatherStation = None, **kwargs: Any) -> None:
         """Update the display with heat index."""
-        temp = self._weather_station.temperature
-        humidity = self._weather_station.humidity
-        heat_index = self._compute_heat_index(temp, humidity)
-        print(f"Heat index: {heat_index:.1f}°F")
+        temp = kwargs.get("temperature")
+        humidity = kwargs.get("humidity")
+
+        self.heat_index = self._compute_heat_index(temp, humidity)
+        print(f"Heat Index is {self.heat_index}°F")
 
     def _compute_heat_index(self, t: float, rh: float) -> float:
         """
@@ -92,12 +110,12 @@ class HeatIndexDisplay(WeatherObserver):
 
         Args:
             t: Temperature in Fahrenheit
-            rh: Relative humidity percentage
+            rh: Relative humidity (percentage)
 
         Returns:
-            The heat index in Fahrenheit
+            float: Heat index in Fahrenheit
         """
-        return (
+        index = (
             (16.923 + (0.185212 * t))
             + (5.37941 * rh)
             - (0.100254 * t * rh)
@@ -112,16 +130,6 @@ class HeatIndexDisplay(WeatherObserver):
             + (0.000000197483 * (t * rh * rh * rh))
             - (0.0000000218429 * (t * t * t * rh * rh))
             + 0.000000000843296 * (t * t * rh * rh * rh)
-            - 0.0000000000481975 * (t * t * t * rh * rh * rh)
+            - (0.0000000000481975 * (t * t * t * rh * rh * rh))
         )
-
-    def display(self) -> str:
-        """
-        Format and display the heat index.
-
-        Returns:
-            Formatted string with the heat index
-        """
-        message = f"Heat Index is {self.heat_index}°F"
-        print(message)
-        return message
+        return round(index, 1)

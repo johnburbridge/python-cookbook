@@ -1,5 +1,18 @@
+"""Document type implementations."""
+
+from enum import Enum
 from datetime import datetime
 from .document import Document
+
+
+class DocumentType(Enum):
+    """Enumeration of supported document types."""
+
+    PDF = "pdf"
+    WORD = "word"
+    HTML = "html"
+    MARKDOWN = "markdown"
+    TEXT = "text"
 
 
 class PDFDocument(Document):
@@ -258,19 +271,21 @@ class HTMLDocument(Document):
     def create(self) -> str:
         """Create an HTML document."""
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        return "\n".join([
-            "<!DOCTYPE html>",
-            "<html>",
-            "<head>",
-            f"<title>{self.title}</title>",
-            "</head>",
-            "<body>",
-            f"<h1>{self.title}</h1>",
-            f"<p>Created: {timestamp}</p>",
-            f"<div>{self.content}</div>",
-            "</body>",
-            "</html>",
-        ])
+        return "\n".join(
+            [
+                "<!DOCTYPE html>",
+                "<html>",
+                "<head>",
+                f"<title>{self.title}</title>",
+                "</head>",
+                "<body>",
+                f"<h1>{self.title}</h1>",
+                f"<p>Created: {timestamp}</p>",
+                f"<div>{self.content}</div>",
+                "</body>",
+                "</html>",
+            ]
+        )
 
     def generate(self) -> str:
         """
@@ -343,13 +358,15 @@ class MarkdownDocument(Document):
     def create(self) -> str:
         """Create a Markdown document."""
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        return "\n".join([
-            f"# {self.title}",
-            "",
-            f"Created: {timestamp}",
-            "",
-            self.content,
-        ])
+        return "\n".join(
+            [
+                f"# {self.title}",
+                "",
+                f"Created: {timestamp}",
+                "",
+                self.content,
+            ]
+        )
 
 
 class TextDocument(Document):
@@ -358,10 +375,12 @@ class TextDocument(Document):
     def create(self) -> str:
         """Create a plain text document."""
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        return "\n".join([
-            self.title.upper(),
-            "=" * len(self.title),
-            f"Created: {timestamp}",
-            "",
-            self.content,
-        ])
+        return "\n".join(
+            [
+                self.title.upper(),
+                "=" * len(self.title),
+                f"Created: {timestamp}",
+                "",
+                self.content,
+            ]
+        )

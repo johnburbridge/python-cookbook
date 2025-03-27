@@ -134,8 +134,7 @@ def main():
     # Demonstrate registering a new document type
     print("\nRegistering a custom document type would work like this:")
     print(
-        "DocumentFactory.register_document_type("
-        "DocumentType.CUSTOM, CustomDocument)"
+        "DocumentFactory.register_document_type(" "DocumentType.CUSTOM, CustomDocument)"
     )
     print(
         "custom_doc = DocumentFactory.create_document("

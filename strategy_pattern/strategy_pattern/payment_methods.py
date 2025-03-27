@@ -1,14 +1,15 @@
 """Payment method implementations."""
 
 from decimal import Decimal
-from typing import Dict
 from strategy_pattern.payment_strategy import PaymentStrategy
 
 
 class CreditCardPayment(PaymentStrategy):
     """Credit card payment implementation."""
 
-    def __init__(self, card_number: str, expiry_date: str, cvv: str) -> None:
+    def __init__(
+        self, card_number: str, expiry_date: str, cvv: str, card_holder: str
+    ) -> None:
         """
         Initialize credit card payment.
 
@@ -16,10 +17,16 @@ class CreditCardPayment(PaymentStrategy):
             card_number: The credit card number
             expiry_date: The card expiry date (MM/YY)
             cvv: The card CVV code
+            card_holder: The name of the card holder
         """
         self.card_number = card_number
         self.expiry_date = expiry_date
         self.cvv = cvv
+        self.card_holder = card_holder
+
+    def _mask_card_number(self) -> str:
+        """Mask the card number for display."""
+        return "*" * 12 + self.card_number[-4:]
 
     def pay(self, amount: Decimal) -> bool:
         """
@@ -31,11 +38,10 @@ class CreditCardPayment(PaymentStrategy):
         Returns:
             True if payment was successful, False otherwise
         """
-        # In a real implementation, this would integrate with a payment gateway
-        print(
-            f"Processing credit card payment of ${amount:.2f} "
-            f"with card ending in {self.card_number[-4:]}"
-        )
+        print("Processing credit card payment")
+        print(f"Card Number: {self._mask_card_number()}")
+        print(f"Card Holder: {self.card_holder}")
+        print("Payment successful!")
         return True
 
 
@@ -63,49 +69,35 @@ class PayPalPayment(PaymentStrategy):
         Returns:
             True if payment was successful, False otherwise
         """
-        # In a real implementation, this would use the PayPal API
-        print(f"Processing PayPal payment of ${amount:.2f} from {self.email}")
+        print("Processing PayPal payment")
+        print(f"PayPal Account: {self.email}")
+        print("Payment successful!")
         return True
 
 
-class CryptoPayment(PaymentStrategy):
-    """Cryptocurrency payment implementation."""
+class BitcoinPayment(PaymentStrategy):
+    """Bitcoin payment implementation."""
 
-    def __init__(self, wallet_address: str, currency: str = "BTC") -> None:
+    def __init__(self, wallet_address: str) -> None:
         """
-        Initialize cryptocurrency payment.
+        Initialize Bitcoin payment.
 
         Args:
-            wallet_address: The cryptocurrency wallet address
-            currency: The cryptocurrency code (default: BTC)
+            wallet_address: The Bitcoin wallet address
         """
         self.wallet_address = wallet_address
-        self.currency = currency.upper()
 
     def pay(self, amount: Decimal) -> bool:
         """
-        Process a cryptocurrency payment.
+        Process a Bitcoin payment.
 
         Args:
-            amount: The payment amount in USD
+            amount: The payment amount
 
         Returns:
             True if payment was successful, False otherwise
         """
-        # Mock exchange rates for demonstration
-        exchange_rates: Dict[str, Decimal] = {
-            "BTC": Decimal("30000.00"),
-            "ETH": Decimal("2000.00"),
-            "DOGE": Decimal("0.10"),
-        }
-
-        if self.currency not in exchange_rates:
-            print(f"Unsupported cryptocurrency: {self.currency}")
-            return False
-
-        crypto_amount = amount / exchange_rates[self.currency]
-        print(
-            f"Processing {self.currency} payment of {crypto_amount:.8f} "
-            f"(${amount:.2f} USD) to {self.wallet_address}"
-        )
+        print("Processing Bitcoin payment")
+        print(f"Bitcoin Wallet: {self.wallet_address}")
+        print("Payment successful!")
         return True

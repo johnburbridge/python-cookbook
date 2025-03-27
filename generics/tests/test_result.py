@@ -52,6 +52,7 @@ class TestResult(unittest.TestCase):
 
     def test_and_then(self) -> None:
         """Test chaining operations with and_then."""
+
         def safe_divide(x: float, y: float) -> Result[float, str]:
             if y == 0:
                 return Result.err("division by zero")
@@ -68,15 +69,13 @@ class TestResult(unittest.TestCase):
         self.assertEqual(result.unwrap_err(), "division by zero")
 
         # Test chain with initial error
-        result = (
-            Result.err("initial error")
-            .and_then(lambda x: safe_divide(x, 2))
-        )
+        result = Result.err("initial error").and_then(lambda x: safe_divide(x, 2))
         self.assertTrue(result.is_err())
         self.assertEqual(result.unwrap_err(), "initial error")
 
     def test_or_else(self) -> None:
         """Test error handling with or_else."""
+
         def handle_error(err: str) -> Result[int, str]:
             if "retry" in err:
                 return Result.ok(42)
@@ -107,13 +106,11 @@ class TestResult(unittest.TestCase):
         """Test that unwrap_err raises on Ok results."""
         with self.assertRaises(ValueError) as context:
             Result.ok(42).unwrap_err()
-        self.assertEqual(
-            str(context.exception),
-            "Called unwrap_err on Ok value: 42"
-        )
+        self.assertEqual(str(context.exception), "Called unwrap_err on Ok value: 42")
 
     def test_map_err(self) -> None:
         """Test mapping over error values."""
+
         def add_context(err: str) -> str:
             return f"Error: {err}"
 
@@ -129,6 +126,7 @@ class TestResult(unittest.TestCase):
 
     def test_practical_example(self) -> None:
         """Test a practical example using Result."""
+
         def parse_int(s: str) -> Result[int, str]:
             try:
                 return Result.ok(int(s))
@@ -147,8 +145,7 @@ class TestResult(unittest.TestCase):
         result = parse_int("not a number").and_then(double)
         self.assertTrue(result.is_err())
         self.assertEqual(
-            result.unwrap_err(),
-            "could not parse 'not a number' as integer"
+            result.unwrap_err(), "could not parse 'not a number' as integer"
         )
 
 

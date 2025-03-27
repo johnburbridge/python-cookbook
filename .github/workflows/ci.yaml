@@ -55,7 +55,7 @@ jobs:
     - name: Run tests with coverage
       run: |
         cd ${{ matrix.recipe }}
-        pytest --cov=${{ matrix.recipe }} --cov-report=xml --cov-report=term-missing tests/
+        python -m pytest --cov=${{ matrix.recipe }} --cov-report=xml --cov-report=term-missing tests/
     
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5

@@ -1,23 +1,20 @@
 """
-Subject (Observable) interface and base class definition.
+Subject Interface and abstract class definition.
 """
 
 from abc import ABC
-from typing import Set
-
+from typing import List
 from .observer import Observer
 
 
 class Subject(ABC):
     """
-    The Subject interface declares methods for managing observers.
+    The Subject interface declares a set of methods for managing observers.
     """
 
-    def __init__(self):
-        """
-        Initialize an empty list of observers.
-        """
-        self._observers: Set[Observer] = set()
+    def __init__(self) -> None:
+        """Initialize an empty list of observers."""
+        self._observers: List[Observer] = []
 
     def attach(self, observer: Observer) -> None:
         """
@@ -26,7 +23,7 @@ class Subject(ABC):
         Args:
             observer: The observer to attach
         """
-        self._observers.add(observer)
+        self._observers.append(observer)
 
     def detach(self, observer: Observer) -> None:
         """
@@ -35,14 +32,14 @@ class Subject(ABC):
         Args:
             observer: The observer to detach
         """
-        self._observers.discard(observer)
+        self._observers.remove(observer)
 
     def notify(self, **kwargs) -> None:
         """
         Notify all observers about an event.
 
         Args:
-            **kwargs: Additional data to pass to observers
+            **kwargs: Data to pass to observers
         """
         for observer in self._observers:
             observer.update(self, **kwargs)

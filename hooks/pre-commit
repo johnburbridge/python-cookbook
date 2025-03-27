@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Exit on error
+set -e
+
+# Get list of staged Python files
+STAGED_PY_FILES=$(git diff --cached --name-only --diff-filter=d | grep -E '\.py$' || true)
+
+if [ -z "$STAGED_PY_FILES" ]; then
+    echo "No Python files to check."
+    exit 0
+fi
+
+# Get the root directory of the repository
+ROOT_DIR=$(git rev-parse --show-toplevel)
+
+# Activate root virtual environment
+. "$ROOT_DIR/venv/bin/activate"
+
+# Run black on staged files
+echo "Running black..."
+echo "$STAGED_PY_FILES" | xargs black --check
+
+# Run flake8 on staged files
+echo "Running flake8..."
+echo "$STAGED_PY_FILES" | xargs flake8
+
+# Deactivate virtual environment
+deactivate
+
+echo "Code quality checks passed! ✨ 🍰 ✨" 
