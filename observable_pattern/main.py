@@ -26,9 +26,11 @@ def demonstrate_observer_pattern():
     current_display = CurrentConditionsDisplay(weather_station)
     statistics_display = StatisticsDisplay(weather_station)
     forecast_display = ForecastDisplay(weather_station)
-    print(f"Created displays: {current_display.__class__.__name__}, "
-          f"{statistics_display.__class__.__name__}, "
-          f"{forecast_display.__class__.__name__}")
+    print(
+        f"Created displays: {current_display.__class__.__name__}, "
+        f"{statistics_display.__class__.__name__}, "
+        f"{forecast_display.__class__.__name__}"
+    )
 
     print("\n--- Initial Weather Update ---")
     # Weather data changes, observers are notified automatically
@@ -68,15 +70,14 @@ def demonstrate_push_vs_pull():
         "Push Model: CurrentConditionsDisplay receives data directly in "
         "update() method"
     )
-    print(
-        "Pull Model: StatisticsDisplay requests data directly from the "
-        "subject\n"
-    )
+    print("Pull Model: StatisticsDisplay requests data directly from the " "subject\n")
 
     current_display = CurrentConditionsDisplay(weather_station)
     statistics_display = StatisticsDisplay(weather_station)
-    print(f"Created displays: {current_display.__class__.__name__}, "
-          f"{statistics_display.__class__.__name__}")
+    print(
+        f"Created displays: {current_display.__class__.__name__}, "
+        f"{statistics_display.__class__.__name__}"
+    )
 
     print("--- Weather Update (Both Models) ---")
     weather_station.set_measurements(75, 60, 30.1)
