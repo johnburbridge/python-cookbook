@@ -8,10 +8,13 @@ from .weather_station import WeatherStation
 class CurrentConditionsDisplay(WeatherObserver):
     """Display current weather conditions."""
 
-    def __init__(self) -> None:
+    def __init__(self, weather_station: WeatherStation) -> None:
         """Initialize the current conditions display."""
+        super().__init__()
+        self.weather_station = weather_station
         self.temperature = 0.0
         self.humidity = 0.0
+        weather_station.attach(self)
 
     def update(self, subject: WeatherStation = None, **kwargs: Any) -> None:
         """Update the display with current conditions."""
@@ -23,8 +26,10 @@ class CurrentConditionsDisplay(WeatherObserver):
 class StatisticsDisplay(WeatherObserver):
     """Display weather statistics."""
 
-    def __init__(self) -> None:
+    def __init__(self, weather_station: WeatherStation) -> None:
         """Initialize the statistics display."""
+        super().__init__()
+        self.weather_station = weather_station
         self.temperatures = []
         self.humidities = []
         self.num_readings = 0
@@ -32,6 +37,7 @@ class StatisticsDisplay(WeatherObserver):
         self.max_temp = float("-inf")
         self.sum_temp = 0.0
         self.temperature_readings = []
+        weather_station.attach(self)
 
     def update(self, subject: WeatherStation = None, **kwargs: Any) -> None:
         """Update the display with weather statistics."""
@@ -59,10 +65,13 @@ class StatisticsDisplay(WeatherObserver):
 class ForecastDisplay(WeatherObserver):
     """Display weather forecast."""
 
-    def __init__(self) -> None:
+    def __init__(self, weather_station: WeatherStation) -> None:
         """Initialize the forecast display."""
+        super().__init__()
+        self.weather_station = weather_station
         self.current_pressure = 29.92
         self.last_pressure = 0.0
+        weather_station.attach(self)
 
     def update(self, subject: WeatherStation = None, **kwargs: Any) -> None:
         """Update the display with forecast."""
@@ -80,9 +89,12 @@ class ForecastDisplay(WeatherObserver):
 class HeatIndexDisplay(WeatherObserver):
     """Display heat index."""
 
-    def __init__(self) -> None:
+    def __init__(self, weather_station: WeatherStation) -> None:
         """Initialize the heat index display."""
+        super().__init__()
+        self.weather_station = weather_station
         self.heat_index = 0.0
+        weather_station.attach(self)
 
     def update(self, subject: WeatherStation = None, **kwargs: Any) -> None:
         """Update the display with heat index."""

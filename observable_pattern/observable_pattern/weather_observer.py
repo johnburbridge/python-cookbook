@@ -1,33 +1,24 @@
-"""Base class for weather observers."""
+"""Weather observer interface."""
 
-from abc import ABC
-from typing import Any
-from .observer import Observer
+from abc import ABC, abstractmethod
+from typing import Any, Optional
+from .weather_station import WeatherStation
 
 
-class WeatherObserver(Observer, ABC):
-    """Base class for weather observers."""
+class WeatherObserver(ABC):
+    """Abstract base class for weather observers."""
 
-    def __init__(self, weather_station) -> None:
+    def __init__(self) -> None:
+        """Initialize the observer."""
+        pass
+
+    @abstractmethod
+    def update(self, subject: Optional[WeatherStation] = None, **kwargs: Any) -> None:
         """
-        Initialize the weather observer.
+        Update the observer with new weather data.
 
         Args:
-            weather_station: The weather station to observe
-        """
-        self._weather_station = weather_station
-        self._weather_station.attach(self)
-
-    def unregister(self) -> None:
-        """Unregister this observer from the weather station."""
-        self._weather_station.detach(self)
-
-    def update(self, subject: Any = None, **kwargs) -> None:
-        """
-        Receive update from subject.
-
-        Args:
-            subject: Optional reference to the Subject that triggered the update
-            **kwargs: Any additional data the subject may send
+            subject: The subject that triggered the update
+            **kwargs: Additional data from the subject
         """
         pass
