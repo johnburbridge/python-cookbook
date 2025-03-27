@@ -50,8 +50,7 @@ for recipe in $RECIPES_TO_TEST; do
         else
             . venv/bin/activate
         fi
-        python -m pytest tests/ -v
-        deactivate
+        python -m pytest tests/ -v || exit 1
         cd "$ROOT_DIR"
     fi
 done
