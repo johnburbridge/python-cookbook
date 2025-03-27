@@ -1,6 +1,6 @@
 # Python Cookbook
 
-[![CI](https://github.com/johnburbridge/python-cookbook/actions/workflows/ci.yml/badge.svg)](https://github.com/johnburbridge/python-cookbook/actions/workflows/ci.yml)
+[![CI](https://github.com/johnburbridge/python-cookbook/actions/workflows/ci.yaml/badge.svg)](https://github.com/johnburbridge/python-cookbook/actions/workflows/ci.yaml)
 [![codecov](https://codecov.io/gh/johnburbridge/python-cookbook/branch/main/graph/badge.svg)](https://codecov.io/gh/johnburbridge/python-cookbook)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
