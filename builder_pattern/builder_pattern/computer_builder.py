@@ -1,4 +1,5 @@
 """Module for building computers using the builder pattern."""
+
 from dataclasses import dataclass
 from typing import Optional
 
@@ -61,10 +62,7 @@ class ComputerBuilder:
         """Build and return the computer."""
         if not self._case:
             raise ValueError("Computer case is required")
-        
-        # Adding a poorly formatted line to test pre-commit hook
-        test_var  =   "this is poorly formatted"
-        
+
         return Computer(
             case=self._case,
             cpu=self._cpu,
@@ -72,4 +70,4 @@ class ComputerBuilder:
             storage=self._storage,
             gpu=self._gpu,
             power_supply=self._power_supply,
-        ) 
+        )
