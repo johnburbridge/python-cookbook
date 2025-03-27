@@ -29,10 +29,7 @@ class WeatherStation(Subject):
         return self._pressure
 
     def set_measurements(
-        self,
-        temperature: float,
-        humidity: float,
-        pressure: float
+        self, temperature: float, humidity: float, pressure: float
     ) -> None:
         """
         Update weather measurements and notify observers.
@@ -45,8 +42,4 @@ class WeatherStation(Subject):
         self._temperature = temperature
         self._humidity = humidity
         self._pressure = pressure
-        self.notify(
-            temperature=temperature,
-            humidity=humidity,
-            pressure=pressure
-        )
+        self.notify(temperature=temperature, humidity=humidity, pressure=pressure)
