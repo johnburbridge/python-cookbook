@@ -7,6 +7,7 @@ from .document import Document
 
 class DocumentType(Enum):
     """Enumeration of supported document types."""
+
     PDF = "pdf"
     WORD = "word"
     HTML = "html"

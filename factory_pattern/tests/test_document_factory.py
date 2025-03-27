@@ -3,7 +3,12 @@ import os
 import tempfile
 from factory_pattern.document import Document
 from factory_pattern.document_factory import DocumentFactory
-from factory_pattern.document_types import DocumentType, PDFDocument, WordDocument, HTMLDocument
+from factory_pattern.document_types import (
+    DocumentType,
+    PDFDocument,
+    WordDocument,
+    HTMLDocument,
+)
 
 
 class TestDocumentFactory(unittest.TestCase):

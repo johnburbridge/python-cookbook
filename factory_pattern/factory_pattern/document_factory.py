@@ -21,7 +21,11 @@ class DocumentFactory:
 
     @classmethod
     def create_document(
-        cls, doc_type: Union[DocumentType, str, int], title: str, author: str, content: str
+        cls,
+        doc_type: Union[DocumentType, str, int],
+        title: str,
+        author: str,
+        content: str,
     ) -> Document:
         """
         Create a document of the specified type.
