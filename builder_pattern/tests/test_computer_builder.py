@@ -45,8 +45,3 @@ def test_computer_builder_no_case():
         assert False, "Should have raised ValueError"
     except ValueError as e:
         assert str(e) == "Computer case is required"
-
-
-def test_failing_test():
-    """Test that should fail to verify pre-push hook."""
-    assert False, "This test should fail"
