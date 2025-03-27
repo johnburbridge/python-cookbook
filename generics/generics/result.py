@@ -71,13 +71,13 @@ class Result(Generic[T, E]):
     def unwrap(self) -> T:
         """Get the success value, raising an error if not successful."""
         if not self._has_value:
-            raise ValueError(f"Called unwrap on an error Result: {self._error}")
+            raise ValueError(str(self._error))
         return self._value  # type: ignore
 
     def unwrap_err(self) -> E:
         """Get the error value, raising an error if successful."""
         if self._has_value:
-            raise ValueError("Called unwrap_err on an ok Result")
+            raise ValueError(f"Called unwrap_err on Ok value: {self._value}")
         return self._error  # type: ignore
 
     def unwrap_or(self, default: T) -> T:
@@ -117,6 +117,12 @@ class Result(Generic[T, E]):
         if not self._has_value:
             return Result(error=self._error)
         return op(self._value)  # type: ignore
+
+    def or_else(self, op: Callable[[E], "Result[T, E]"]) -> "Result[T, E]":
+        """Chain error handling operations."""
+        if self._has_value:
+            return Result(value=self._value)
+        return op(self._error)  # type: ignore
 
     def __str__(self) -> str:
         """Get a string representation of the Result."""
