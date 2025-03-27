@@ -5,15 +5,15 @@ This module provides a complete implementation of the Builder Pattern
 for meal preparation.
 """
 
-from builder_pattern.meal import Meal, MealItem
-from builder_pattern.meal_builder import MealBuilder
-from builder_pattern.concrete_builders import (
+from .meal import Meal, MealItem
+from .meal_builder import MealBuilder
+from .concrete_builders import (
     RegularMealBuilder,
     VegetarianMealBuilder,
     ChildrenMealBuilder,
 )
-from builder_pattern.meal_director import MealDirector, MealConfig
-from builder_pattern.fluent_builder import FluentMealBuilder
+from .meal_director import MealDirector, MealConfig
+from .fluent_builder import FluentMealBuilder
 
 __all__ = [
     "Meal",
