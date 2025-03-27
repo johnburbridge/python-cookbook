@@ -27,20 +27,16 @@ class RegularMealBuilder(MealBuilder):
 
     def add_nutrition_info(self) -> None:
         """Add nutrition information."""
-        self._meal.nutrition_info.update({
-            "calories": 1200,
-            "protein": "30g",
-            "carbs": "150g",
-            "fat": "45g"
-        })
+        self._meal.nutrition_info.update(
+            {"calories": 1200, "protein": "30g", "carbs": "150g", "fat": "45g"}
+        )
 
 
 class VegetarianMealBuilder(MealBuilder):
     """Builder for vegetarian meals."""
 
-    def __init__(self):
-        """Initialize with vegetarian flag set."""
-        super().__init__()
+    def _initialize_meal(self) -> None:
+        """Initialize vegetarian meal properties."""
         self._meal.is_vegetarian = True
 
     def add_main_dish(self) -> None:
@@ -68,9 +64,8 @@ class VegetarianMealBuilder(MealBuilder):
 class ChildrenMealBuilder(MealBuilder):
     """Builder for children's meals."""
 
-    def __init__(self):
-        """Initialize with kids meal flag set."""
-        super().__init__()
+    def _initialize_meal(self) -> None:
+        """Initialize children's meal properties."""
         self._meal.is_kids_meal = True
 
     def add_main_dish(self) -> None:

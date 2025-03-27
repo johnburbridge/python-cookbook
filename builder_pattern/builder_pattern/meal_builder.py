@@ -1,7 +1,7 @@
 """Module containing the abstract MealBuilder class."""
 
 from abc import ABC, abstractmethod
-from .meal import Meal
+from .meal import Meal, MealItem
 
 
 class MealBuilder(ABC):
@@ -9,11 +9,17 @@ class MealBuilder(ABC):
 
     def __init__(self):
         """Initialize the builder with a reset."""
+        self._meal = None
         self.reset()
 
     def reset(self) -> None:
         """Reset the builder to create a new meal."""
         self._meal = Meal(name="")
+        self._initialize_meal()
+
+    def _initialize_meal(self) -> None:
+        """Initialize meal-specific properties. Override in concrete builders."""
+        pass
 
     @property
     def meal(self) -> Meal:
@@ -60,7 +66,7 @@ class MealBuilder(ABC):
 
     def add_appetizer(self) -> None:
         """Add an appetizer to the meal."""
-        pass
+        self._meal.appetizer = MealItem.SOUP
 
     def add_extras(self) -> None:
         """Add extras to the meal."""

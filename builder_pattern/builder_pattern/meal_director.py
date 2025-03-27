@@ -9,6 +9,7 @@ from .meal import Meal
 @dataclass
 class MealConfig:
     """Configuration for meal construction."""
+
     name: str
     price: float
     description: Optional[str] = None
@@ -37,7 +38,9 @@ class MealDirector:
         if not self._builder:
             raise ValueError("No builder set. Call set_builder() first.")
 
-    def construct_basic_meal(self, name: str = "Basic Meal", price: float = 8.99) -> Meal:
+    def construct_basic_meal(
+        self, name: str = "Basic Meal", price: float = 8.99
+    ) -> Meal:
         """Construct a basic meal with just main dish and drink."""
         self._check_builder()
         self._builder.reset()
@@ -59,9 +62,10 @@ class MealDirector:
         return self._builder.get_meal()
 
     def construct_premium_meal(
-        self, name: str = "Premium Meal",
+        self,
+        name: str = "Premium Meal",
         price: float = 15.99,
-        description: str = "A complete premium meal"
+        description: str = "A complete premium meal",
     ) -> Meal:
         """Construct a premium meal with all components."""
         self._check_builder()
@@ -84,7 +88,7 @@ class MealDirector:
         self._builder.reset()
         self._builder.set_name(config.name)
         self._builder.set_price(config.price)
-        
+
         if config.description:
             self._builder.set_description(config.description)
         if config.main_dish:
@@ -101,7 +105,7 @@ class MealDirector:
             self._builder.add_extras()
         if config.nutrition_info:
             self._builder.add_nutrition_info()
-        
+
         return self._builder.get_meal()
 
     def construct_meal_from_dict(self, config: Dict[str, Any]) -> Meal:
@@ -116,6 +120,6 @@ class MealDirector:
             dessert=config.get("dessert", False),
             appetizer=config.get("appetizer", False),
             extras=config.get("extras", False),
-            nutrition_info=config.get("nutrition_info", False)
+            nutrition_info=config.get("nutrition_info", False),
         )
         return self.construct_custom_meal(meal_config)
