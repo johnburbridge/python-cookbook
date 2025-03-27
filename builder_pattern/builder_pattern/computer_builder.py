@@ -63,7 +63,7 @@ class ComputerBuilder:
             raise ValueError("Computer case is required")
         
         # Adding a poorly formatted line to test pre-commit hook
-        test_var  =   "this is poorly formatted"     # noqa
+        test_var  =   "this is poorly formatted"
         
         return Computer(
             case=self._case,
