@@ -1,5 +1,9 @@
 # Python Cookbook
 
+[![CI](https://github.com/johnburbridge/python-cookbook/actions/workflows/ci.yml/badge.svg)](https://github.com/johnburbridge/python-cookbook/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/johnburbridge/python-cookbook/branch/main/graph/badge.svg)](https://codecov.io/gh/johnburbridge/python-cookbook)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 This repository contains a collection of Python projects that exemplify common operations and design patterns in Python. It serves as a quick reference guide with practical examples (recipes) of how to implement frequently used libraries and design patterns in Python 3.11+.
 
 ## Development Setup
