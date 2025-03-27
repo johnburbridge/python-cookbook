@@ -30,17 +30,33 @@ if [ -z "$RECIPES_TO_TEST" ]; then
 fi
 
 # Activate root virtual environment for task
-. "$ROOT_DIR/venv/bin/activate"
+if [ ! -d "$ROOT_DIR/venv" ]; then
+    python3 -m venv "$ROOT_DIR/venv"
+    . "$ROOT_DIR/venv/bin/activate"
+    pip install -r "$ROOT_DIR/requirements-dev.txt"
+else
+    . "$ROOT_DIR/venv/bin/activate"
+fi
 
 # Run tests for each changed recipe
 for recipe in $RECIPES_TO_TEST; do
     if [ -d "$ROOT_DIR/$recipe" ] && [ -f "$ROOT_DIR/$recipe/requirements.txt" ]; then
         echo "Testing recipe: $recipe"
-        task test RECIPE="$recipe"
+        cd "$ROOT_DIR/$recipe"
+        if [ ! -d "venv" ]; then
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+        else
+            . venv/bin/activate
+        fi
+        python -m pytest tests/ -v
+        deactivate
+        cd "$ROOT_DIR"
     fi
 done
 
-# Deactivate virtual environment
+# Deactivate root virtual environment
 deactivate
 
 echo "All tests passed! 🚀" 
