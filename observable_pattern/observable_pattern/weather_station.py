@@ -3,8 +3,8 @@ Concrete Subject implementation for the weather monitoring system.
 """
 
 from typing import List
-from .observer import Subject
-from .weather_displays import WeatherObserver
+from .subject import Subject
+from .observer import Observer
 
 
 class WeatherStation(Subject):
@@ -21,7 +21,6 @@ class WeatherStation(Subject):
         self._temperature: float = 0.0
         self._humidity: float = 0.0
         self._pressure: float = 0.0
-        self._observers: List[WeatherObserver] = []
 
     @property
     def temperature(self) -> float:
@@ -55,7 +54,11 @@ class WeatherStation(Subject):
         self._temperature = temperature
         self._humidity = humidity
         self._pressure = pressure
-        self.notify_observers()
+        self.notify(
+            temperature=self._temperature,
+            humidity=self._humidity,
+            pressure=self._pressure,
+        )
 
     def measurements_changed(self) -> None:
         """
