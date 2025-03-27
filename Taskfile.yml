@@ -1,0 +1,91 @@
+version: "3"
+
+vars:
+  PYTHON: /opt/homebrew/bin/python3.13
+  VENV_DIR: venv
+  RECIPES:
+    sh: ls -d */ | grep -v "venv" | sed 's/\///g' | tr '\n' ' '
+
+tasks:
+  setup-root-venv:
+    desc: Create and setup root virtual environment
+    cmds:
+      - |
+        if [ ! -d "{{.VENV_DIR}}" ]; then
+          {{.PYTHON}} -m venv {{.VENV_DIR}}
+          . {{.VENV_DIR}}/bin/activate
+          pip install -r requirements-dev.txt
+        else
+          . {{.VENV_DIR}}/bin/activate
+        fi
+    status:
+      - test -d {{.VENV_DIR}}
+
+  setup-recipe-venv:
+    desc: Create and setup recipe virtual environment
+    dir: "{{.RECIPE}}"
+    cmds:
+      - |
+        if [ -f "requirements.txt" ]; then
+          if [ ! -d "venv" ]; then
+            {{.PYTHON}} -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+          else
+            . venv/bin/activate
+          fi
+        fi
+    status:
+      - test -f requirements.txt
+
+  format:
+    desc: Format Python files using black
+    dir: "{{.RECIPE}}"
+    deps: [setup-root-venv]
+    cmds:
+      - |
+        . ../{{.VENV_DIR}}/bin/activate
+        black {{.RECIPE}}/ tests/
+
+  lint:
+    desc: Lint Python files using flake8
+    dir: "{{.RECIPE}}"
+    deps: [setup-root-venv]
+    cmds:
+      - |
+        . ../{{.VENV_DIR}}/bin/activate
+        flake8 {{.RECIPE}}/ tests/
+
+  test:
+    desc: Run tests for a recipe
+    dir: "{{.RECIPE}}"
+    deps: [setup-recipe-venv]
+    cmds:
+      - |
+        if [ -f "requirements.txt" ]; then
+          . venv/bin/activate
+          python -m pytest tests/ -v
+          deactivate || true
+        fi
+
+  validate-recipe:
+    desc: Run format, lint, and test for a recipe
+    cmds:
+      - task: format
+        vars: { RECIPE: "{{.RECIPE}}" }
+      - task: lint
+        vars: { RECIPE: "{{.RECIPE}}" }
+      - task: test
+        vars: { RECIPE: "{{.RECIPE}}" }
+
+  validate-all:
+    desc: Run validation for all recipes
+    cmds:
+      - for: { var: RECIPES }
+        task: validate-recipe
+        vars: { RECIPE: "{{.ITEM}}" }
+
+  default:
+    desc: Show available recipes
+    cmds:
+      - echo Available recipes {{.RECIPES}}
