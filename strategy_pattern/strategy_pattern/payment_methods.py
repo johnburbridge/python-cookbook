@@ -1,14 +1,15 @@
 """Payment method implementations."""
 
 from decimal import Decimal
-from typing import Dict
 from strategy_pattern.payment_strategy import PaymentStrategy
 
 
 class CreditCardPayment(PaymentStrategy):
     """Credit card payment implementation."""
 
-    def __init__(self, card_number: str, expiry_date: str, cvv: str, card_holder: str) -> None:
+    def __init__(
+        self, card_number: str, expiry_date: str, cvv: str, card_holder: str
+    ) -> None:
         """
         Initialize credit card payment.
 
@@ -37,7 +38,6 @@ class CreditCardPayment(PaymentStrategy):
         Returns:
             True if payment was successful, False otherwise
         """
-        # In a real implementation, this would integrate with a payment gateway
         print("Processing credit card payment")
         print(f"Card Number: {self._mask_card_number()}")
         print(f"Card Holder: {self.card_holder}")
@@ -69,7 +69,6 @@ class PayPalPayment(PaymentStrategy):
         Returns:
             True if payment was successful, False otherwise
         """
-        # In a real implementation, this would use the PayPal API
         print("Processing PayPal payment")
         print(f"PayPal Account: {self.email}")
         print("Payment successful!")
