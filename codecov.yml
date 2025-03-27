@@ -1,0 +1,60 @@
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 1%
+    patch:
+      default:
+        target: 90%
+
+comment:
+  layout: "header, diff, flags, components" # Show component info in PR comments
+
+component_management:
+  default_rules:
+    statuses:
+      - type: project
+        target: auto
+        threshold: 1%
+      - type: patch
+        target: 90%
+    paths:
+      - "**/*.py" # Only consider Python files
+
+  individual_components:
+    - component_id: builder_pattern
+      name: Builder Pattern
+      paths:
+        - builder_pattern/**
+
+    - component_id: factory_pattern
+      name: Factory Pattern
+      paths:
+        - factory_pattern/**
+
+    - component_id: generics
+      name: Generics
+      paths:
+        - generics/**
+
+    - component_id: observable_pattern
+      name: Observable Pattern
+      paths:
+        - observable_pattern/**
+
+    - component_id: strategy_pattern
+      name: Strategy Pattern
+      paths:
+        - strategy_pattern/**
+
+    # Cross-cutting components for common patterns
+    - component_id: tests
+      name: Test Coverage
+      paths:
+        - "**/tests/**"
+
+    - component_id: core_implementations
+      name: Core Implementations
+      paths:
+        - "**/[^tests]/**/*.py" # All Python files not in tests directories
